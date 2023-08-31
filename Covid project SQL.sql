@@ -1,3 +1,5 @@
+--Link to Dataset: https://ourworldindata.org/covid-deaths
+
 --Top 3 countries by infection rate per continent
 with infection_rate as (
 select rank() over(partition by continent order by max(total_cases)/max(population) desc) as continent_rank,
