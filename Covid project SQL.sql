@@ -1,4 +1,7 @@
+
 --Link to Dataset: https://ourworldindata.org/covid-deaths
+
+------------------------------------------------------------
 
 --Top 3 countries by infection rate per continent
 with infection_rate as (
@@ -13,6 +16,8 @@ from infection_rate
 where continent_rank<=3
 order by avg(infection_rate) over(partition by continent) desc --order by the highest rate in the continent level
 
+------------------------------------------------------------
+
 --Check vaccinations/population ratio for specific country
 with popVSvac as (
 select vac.continent,vac.location,vac.date,population,
@@ -25,6 +30,7 @@ from popVSvac
 where location='United Kingdom'
 order by 3
 
+------------------------------------------------------------  
 -- Rank months by number of countries where each month was the deadliest
 with deaths_by_month as(
 select location, format(date,'yyyy-MM') as 'Month',sum(convert(int,new_deaths)) as total_deaths
@@ -40,6 +46,8 @@ where total_deaths=(select max(total_deaths) from deaths_by_month t2 where t1.lo
 where total_deaths is not null --exclude countries that have 0 deaths
 group by Month
 order by count(*) desc
+
+------------------------------------------------------------
 
 --Vaccine Rollout Efficiency (check number of days to reach vaccination/population ratio of 10%)
 with first_vac as(
